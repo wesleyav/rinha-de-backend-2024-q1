@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.wesleyav.api.dtos.requests.TransacaoRequestDTO;
 import com.github.wesleyav.api.dtos.responses.ClienteResponseDTO;
+import com.github.wesleyav.api.dtos.responses.ExtratoResponseDTO;
 import com.github.wesleyav.api.entities.Cliente;
 import com.github.wesleyav.api.services.ClienteService;
+import com.github.wesleyav.api.services.ExtratoService;
 import com.github.wesleyav.api.services.TransacaoService;
 
 @RestController
@@ -24,10 +26,13 @@ public class ClienteController {
 
 	private ClienteService clienteService;
 	private TransacaoService transacaoService;
+	private ExtratoService extratoService;
 
-	public ClienteController(ClienteService clienteService, TransacaoService transacaoService) {
+	public ClienteController(ClienteService clienteService, TransacaoService transacaoService,
+			ExtratoService extratoService) {
 		this.clienteService = clienteService;
 		this.transacaoService = transacaoService;
+		this.extratoService = extratoService;
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,6 +53,12 @@ public class ClienteController {
 
 		ClienteResponseDTO clienteResponseDTO = transacaoService.criarTransacao(id, transacaoRequestDTO);
 		return ResponseEntity.ok(clienteResponseDTO);
+	}
+
+	@GetMapping(value = "/{id}/extrato", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ExtratoResponseDTO> extrato(@PathVariable Integer id) {
+		ExtratoResponseDTO extratoResponseDTO = extratoService.obterExtratoPorClienteId(id);
+		return ResponseEntity.ok(extratoResponseDTO);
 	}
 
 }

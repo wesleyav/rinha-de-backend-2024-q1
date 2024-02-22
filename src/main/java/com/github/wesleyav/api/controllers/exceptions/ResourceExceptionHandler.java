@@ -77,7 +77,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) {
 		String error = "Recurso não existe na base de dados.";
-		HttpStatus status = HttpStatus.BAD_REQUEST;
+		HttpStatus status = HttpStatus.NOT_FOUND;
 
 		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
 				request.getRequestURI());
