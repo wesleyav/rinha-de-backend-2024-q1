@@ -140,4 +140,7 @@ buildNumber.properties
 .history
 .ionide
 
+### GATLING ###
+load-test/user-files/results
+
 # End of https://www.toptal.com/developers/gitignore/api/java,eclipse,visualstudiocode,maven
