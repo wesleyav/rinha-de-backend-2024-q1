@@ -75,8 +75,8 @@ public class TransacaoService {
 			throw new ValorTransacaoPositivoException();
 		}
 
-		char tipo = transacaoRequestDTO.getTipo();
-		if (tipo != 'c' && tipo != 'd') {
+		String tipo = transacaoRequestDTO.getTipo();
+		if (!"c".equals(tipo) && !"d".equals(tipo)) {
 			throw new TipoTransacaoInvalidoException();
 		}
 
@@ -87,18 +87,18 @@ public class TransacaoService {
 	}
 
 	private void atualizarSaldoCliente(Cliente cliente, TransacaoRequestDTO transacao) {
-		if (transacao.getTipo() == 'd' && transacao.getValor() > (cliente.getSaldo() + cliente.getLimite())) {
-			throw new DebitoExcedeLimiteException();
-		}
+		if ("d".equals(transacao.getTipo())) {
+			if (transacao.getValor() > (cliente.getSaldo() + cliente.getLimite())) {
+				throw new DebitoExcedeLimiteException();
+			}
 
-		if (transacao.getTipo() == 'd' && cliente.getSaldo() < transacao.getValor()) {
-			throw new DebitoCausaSaldoNegativoException();
-		}
+			if (cliente.getSaldo() < transacao.getValor()) {
+				throw new DebitoCausaSaldoNegativoException();
+			}
 
-		if (transacao.getTipo() == 'c') {
-			cliente.setSaldo(cliente.getSaldo() + transacao.getValor());
-		} else if (transacao.getTipo() == 'd') {
 			cliente.setSaldo(cliente.getSaldo() - transacao.getValor());
+		} else if ("c".equals(transacao.getTipo())) {
+			cliente.setSaldo(cliente.getSaldo() + transacao.getValor());
 		}
 	}
 

@@ -42,4 +42,5 @@ public class ExtratoService {
 
 		return new ExtratoResponseDTO(saldoResponseDTO, transacoesResponseDTOs);
 	}
+
 }

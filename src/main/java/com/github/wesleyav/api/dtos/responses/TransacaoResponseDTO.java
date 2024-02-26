@@ -5,30 +5,30 @@ import java.time.Instant;
 public class TransacaoResponseDTO {
 
 	private Integer valor;
-	private char tipo;
+	private String tipo;
 	private String descricao;
 	private Instant realizada_em;
 
-	public TransacaoResponseDTO(Integer valor, char tipo, String descricao, Instant realizada_em) {
+	public TransacaoResponseDTO(Integer valor, String tipo, String descricao, Instant realizada_em) {
 		this.valor = valor;
 		this.tipo = tipo;
 		this.descricao = descricao;
 		this.realizada_em = realizada_em;
 	}
 
-	public int getValor() {
+	public Integer getValor() {
 		return valor;
 	}
 
-	public void setValor(int valor) {
+	public void setValor(Integer valor) {
 		this.valor = valor;
 	}
 
-	public char getTipo() {
+	public String getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(char tipo) {
+	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
 

@@ -27,7 +27,7 @@ public class Transacao implements Serializable {
 
 	private Integer valor;
 
-	private char tipo;
+	private String tipo;
 
 	private String descricao;
 
@@ -40,22 +40,6 @@ public class Transacao implements Serializable {
 	private Cliente cliente;
 
 	public Transacao() {
-	}
-
-	public Transacao(Integer valor, char tipo, String descricao, Instant realizadaEm) {
-		if (valor <= 0) {
-			throw new IllegalArgumentException("O valor deve ser um número inteiro positivo.");
-		}
-		if (tipo != 'c' && tipo != 'd') {
-			throw new IllegalArgumentException("O tipo deve ser 'c' para crédito ou 'd' para débito.");
-		}
-		if (descricao == null || descricao.length() < 1 || descricao.length() > 10) {
-			throw new IllegalArgumentException("A descrição deve ter entre 1 e 10 caracteres.");
-		}
-		this.valor = valor;
-		this.tipo = tipo;
-		this.descricao = descricao;
-		this.realizadaEm = realizadaEm;
 	}
 
 	public Integer getId() {
@@ -74,11 +58,11 @@ public class Transacao implements Serializable {
 		this.valor = valor;
 	}
 
-	public char getTipo() {
+	public String getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(char tipo) {
+	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
 
