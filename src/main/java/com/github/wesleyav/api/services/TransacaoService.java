@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.wesleyav.api.dtos.requests.TransacaoRequestDTO;
 import com.github.wesleyav.api.dtos.responses.ClienteResponseDTO;
@@ -19,7 +21,6 @@ import com.github.wesleyav.api.services.exceptions.TipoTransacaoInvalidoExceptio
 import com.github.wesleyav.api.services.exceptions.ValorTransacaoPositivoException;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 
 @Service
 public class TransacaoService {
@@ -43,7 +44,7 @@ public class TransacaoService {
 		return transacoes;
 	}
 
-	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public ClienteResponseDTO criarTransacao(Integer clienteId, TransacaoRequestDTO transacaoRequestDTO) {
 		Cliente cliente = clienteRepository.findById(clienteId)
 				.orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID: " + clienteId));

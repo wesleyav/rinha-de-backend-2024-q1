@@ -41,9 +41,9 @@ services:
     build:
       context: .
     ports:
-      - "8081:8081"
+      - "8082:8082"
     environment:
-      - SERVER_PORT=8081
+      - SERVER_PORT=8082
       - MYSQL_URL=jdbc:mysql://mysqlserver/db_api
     volumes:
       - ./:/app
@@ -65,9 +65,9 @@ services:
     build:
       context: .
     ports:
-      - "8082:8082"
+      - "8083:8083"
     environment:
-      - SERVER_PORT=8082
+      - SERVER_PORT=8083
       - MYSQL_URL=jdbc:mysql://mysqlserver/db_api
     volumes:
       - ./:/app

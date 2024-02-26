@@ -2,7 +2,6 @@ package com.github.wesleyav.api.controllers;
 
 import java.util.List;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,7 @@ import com.github.wesleyav.api.services.exceptions.DebitoExcedeLimiteException;
 import com.github.wesleyav.api.services.exceptions.DescricaoTransacaoInvalidaException;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/clientes")
@@ -52,26 +52,33 @@ public class ClienteController {
 		return new ResponseEntity<>(clientes, HttpStatus.OK);
 	}
 
-//	@PostMapping(value = "/{id}/transacoes")
-//	public ResponseEntity<ClienteResponseDTO> criarTransacao(@PathVariable Integer id,
-//			@RequestBody TransacaoRequestDTO transacaoRequestDTO) {
-//
-//		ClienteResponseDTO clienteResponseDTO = transacaoService.criarTransacao(id, transacaoRequestDTO);
-//		return ResponseEntity.ok(clienteResponseDTO);
-//	}
+	// @PostMapping(value = "/{id}/transacoes")
+	// public ResponseEntity<ClienteResponseDTO> criarTransacao(@PathVariable
+	// Integer id,
+	// @RequestBody TransacaoRequestDTO transacaoRequestDTO) {
+	//
+	// ClienteResponseDTO clienteResponseDTO = transacaoService.criarTransacao(id,
+	// transacaoRequestDTO);
+	// return ResponseEntity.ok(clienteResponseDTO);
+	// }
 
 	@PostMapping(value = "/{id}/transacoes")
-	public ResponseEntity<ClienteResponseDTO> criarTransacao(@PathVariable Integer id,
-			@RequestBody TransacaoRequestDTO transacaoRequestDTO) {
+	public ResponseEntity<Object> criarTransacao(@Valid @PathVariable Integer id,
+			@Valid @RequestBody TransacaoRequestDTO transacaoRequestDTO) {
 		try {
 			ClienteResponseDTO clienteResponseDTO = transacaoService.criarTransacao(id, transacaoRequestDTO);
-			return ResponseEntity.ok(clienteResponseDTO);
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			return new ResponseEntity<>(clienteResponseDTO, HttpStatus.OK);
 		} catch (DebitoExcedeLimiteException e) {
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.body("A transação de débito excede o limite disponível do cliente");
 		} catch (DescricaoTransacaoInvalidaException e) {
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.body("A descrição da transação deve ter entre 1 e 10 caracteres");
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Ocorreu um erro ao processar a transação");
 		}
 	}
 
@@ -80,8 +87,8 @@ public class ClienteController {
 		try {
 			ExtratoResponseDTO extratoResponseDTO = extratoService.obterExtratoPorClienteId(id);
 			return ResponseEntity.ok(extratoResponseDTO);
-		} catch (EmptyResultDataAccessException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Registro não encontrado
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 
