@@ -12,6 +12,8 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - '3306:3306'
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d
     deploy:
       resources:
         limits:
@@ -47,6 +49,11 @@ services:
       - ./:/app
     depends_on:
       - mysqlserver
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://mysqlserver:3306"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     deploy:
       resources:
         limits:
@@ -66,6 +73,11 @@ services:
       - ./:/app
     depends_on:
       - mysqlserver
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://mysqlserver:3306"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     deploy:
       resources:
         limits:

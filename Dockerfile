@@ -2,7 +2,8 @@ FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
-RUN ./mvnw dependency:resolve
+RUN chmod +x mvnw && \
+    ./mvnw dependency:resolve
 COPY src ./src
 EXPOSE 8081
-CMD [ "./mvnw", "spring-boot:run"]
+CMD ["./mvnw", "spring-boot:run"]
