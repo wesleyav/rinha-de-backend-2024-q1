@@ -1,30 +1,25 @@
 package com.github.wesleyav.api.dtos.requests;
 
-import com.github.wesleyav.api.entities.Transacao;
-
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 
 public class TransacaoRequestDTO {
 
-	@PositiveOrZero
+	@NotNull
 	private Integer valor;
 
-	@Pattern(regexp = "[cd]", message = "O tipo deve ser 'c' ou 'd'")
+	@NotNull
 	private String tipo;
 
-	@Size(min = 1, max = 10)
+	@NotNull
 	private String descricao;
 
-	public Transacao convertToDTO(TransacaoRequestDTO dto) {
-		Transacao transacao = new Transacao();
+	public TransacaoRequestDTO() {
+	}
 
-		transacao.setValor(dto.getValor());
-		transacao.setTipo(dto.getTipo());
-		transacao.setDescricao(dto.getDescricao());
-
-		return transacao;
+	public TransacaoRequestDTO(Integer valor, String tipo, String descricao) {
+		this.valor = valor;
+		this.tipo = tipo;
+		this.descricao = descricao;
 	}
 
 	public Integer getValor() {
@@ -37,6 +32,18 @@ public class TransacaoRequestDTO {
 
 	public String getDescricao() {
 		return descricao;
+	}
+
+	public void setValor(Integer valor) {
+		this.valor = valor;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 }

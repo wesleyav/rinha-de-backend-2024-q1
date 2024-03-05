@@ -7,4 +7,8 @@ public class DebitoExcedeLimiteException extends RuntimeException {
 	public DebitoExcedeLimiteException() {
 		super();
 	}
+
+	public DebitoExcedeLimiteException(String string) {
+		super(string);
+	}
 }

@@ -1,2 +1,0 @@
-GRANT ALL PRIVILEGES ON db_api.* TO 'seiya'@'%';
-FLUSH PRIVILEGES;

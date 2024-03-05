@@ -1,45 +1,63 @@
 package com.github.wesleyav.api.entities;
 
-import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "transacao")
-public class Transacao implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Transacao {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(name = "cliente_id")
+	public Integer clienteId;
+
+	@Column(name = "valor")
 	private Integer valor;
 
+	@Column(name = "tipo")
 	private String tipo;
 
+	@Column(name = "descricao")
 	private String descricao;
 
 	@JsonFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'", timezone = "UTC")
 	private Instant realizadaEm;
 
-	@ManyToOne
-	@JoinColumn(name = "cliente_id")
-	@JsonIgnore
-	private Cliente cliente;
+	@Version
+	private Integer version;
 
 	public Transacao() {
+	}
+
+	public Transacao(Integer id, Integer clienteId, Integer valor, String tipo, String descricao, Instant realizadaEm,
+			Integer version) {
+		this.id = id;
+		this.clienteId = clienteId;
+		this.valor = valor;
+		this.tipo = tipo;
+		this.descricao = descricao;
+		this.realizadaEm = realizadaEm;
+		this.version = version;
+	}
+
+	public Transacao(Integer valor, String tipo, String descricao, Instant realizadaEm, Cliente cliente) {
+		this.valor = valor;
+		this.tipo = tipo;
+		this.descricao = descricao;
+		this.realizadaEm = realizadaEm;
+		this.clienteId = cliente.getId();
 	}
 
 	public Integer getId() {
@@ -48,6 +66,14 @@ public class Transacao implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getClienteId() {
+		return clienteId;
+	}
+
+	public void setClienteId(Integer clienteId) {
+		this.clienteId = clienteId;
 	}
 
 	public Integer getValor() {
@@ -82,28 +108,12 @@ public class Transacao implements Serializable {
 		this.realizadaEm = realizadaEm;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public Integer getVersion() {
+		return version;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Transacao other = (Transacao) obj;
-		return Objects.equals(id, other.id);
-	}
 }

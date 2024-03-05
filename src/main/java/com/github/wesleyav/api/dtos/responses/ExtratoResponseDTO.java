@@ -2,22 +2,11 @@ package com.github.wesleyav.api.dtos.responses;
 
 import java.util.List;
 
-public class ExtratoResponseDTO {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	private SaldoResponseDTO saldo;
-	private List<TransacaoResponseDTO> ultimas_transacoes;
+public record ExtratoResponseDTO(
 
-	public ExtratoResponseDTO(SaldoResponseDTO saldo, List<TransacaoResponseDTO> ultimas_transacoes) {
-		this.saldo = saldo;
-		this.ultimas_transacoes = ultimas_transacoes;
-	}
-
-	public SaldoResponseDTO getSaldo() {
-		return saldo;
-	}
-
-	public List<TransacaoResponseDTO> getUltimas_transacoes() {
-		return ultimas_transacoes;
-	}
+		@JsonProperty("saldo") SaldoResponseDTO saldo,
+		@JsonProperty("ultimas_transacoes") List<TransacaoResponseDTO> ultimasTransacoes) {
 
 }

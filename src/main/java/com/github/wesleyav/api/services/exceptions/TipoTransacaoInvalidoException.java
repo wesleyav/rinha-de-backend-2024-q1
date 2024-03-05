@@ -7,4 +7,8 @@ public class TipoTransacaoInvalidoException extends RuntimeException {
 	public TipoTransacaoInvalidoException() {
 		super();
 	}
+
+	public TipoTransacaoInvalidoException(String string) {
+		super(string);
+	}
 }

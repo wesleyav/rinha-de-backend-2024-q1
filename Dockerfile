@@ -5,5 +5,4 @@ COPY mvnw pom.xml ./
 RUN chmod +x mvnw && \
     ./mvnw dependency:resolve
 COPY src ./src
-EXPOSE 8082
 CMD [ "./mvnw", "spring-boot:run", "-Dspring-boot.run.profiles=dev"]

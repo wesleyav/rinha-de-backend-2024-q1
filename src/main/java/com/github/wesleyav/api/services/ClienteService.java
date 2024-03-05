@@ -3,12 +3,11 @@ package com.github.wesleyav.api.services;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.wesleyav.api.entities.Cliente;
 import com.github.wesleyav.api.repositories.ClienteRepository;
 import com.github.wesleyav.api.services.exceptions.ResourceNotFoundException;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class ClienteService {

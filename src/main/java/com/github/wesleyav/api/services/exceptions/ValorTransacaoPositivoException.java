@@ -6,6 +6,9 @@ public class ValorTransacaoPositivoException extends RuntimeException {
 
 	public ValorTransacaoPositivoException() {
 		super();
+	}
 
+	public ValorTransacaoPositivoException(String string) {
+		super(string);
 	}
 }
