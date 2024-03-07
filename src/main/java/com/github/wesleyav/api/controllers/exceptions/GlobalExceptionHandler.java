@@ -17,21 +17,23 @@ import com.github.wesleyav.api.services.exceptions.TipoTransacaoInvalidoExceptio
 import com.github.wesleyav.api.services.exceptions.ValorTransacaoNuloException;
 import com.github.wesleyav.api.services.exceptions.ValorTransacaoPositivoException;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-//	@ExceptionHandler(PayloadException.class)
-//	public ResponseEntity<StandardError> payloadException(PayloadException e, HttpServletRequest request) {
-//		String error = "Payload fora da especificação";
-//		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-//
-//		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
-//				request.getRequestURI());
-//		return ResponseEntity.status(status).body(standardError);
-//	}
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<StandardError> entityNotFoundException(EntityNotFoundException e,
+			HttpServletRequest request) {
+		String error = "O id do cliente deve ser entre 1 e 6.";
+		HttpStatus status = HttpStatus.NOT_FOUND;
+
+		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(status).body(standardError);
+	}
 
 	@ExceptionHandler(ValorTransacaoPositivoException.class)
 	public ResponseEntity<StandardError> valorTransacaoPositivoException(ValorTransacaoPositivoException e,
@@ -91,7 +93,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<StandardError> clienteNotFoundException(ClienteNotFoundException e,
 			HttpServletRequest request) {
 		String error = "Cliente não encontrado.";
-		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+		HttpStatus status = HttpStatus.NOT_FOUND;
 
 		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
 				request.getRequestURI());
