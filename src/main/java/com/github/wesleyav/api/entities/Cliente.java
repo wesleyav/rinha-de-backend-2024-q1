@@ -1,10 +1,15 @@
 package com.github.wesleyav.api.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,6 +25,9 @@ public class Cliente {
 
 	@Column(name = "saldo", nullable = false)
 	private Integer saldo;
+
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+	private List<Transacao> transacoes = new ArrayList<>();
 
 	public Cliente() {
 	}
@@ -59,6 +67,14 @@ public class Cliente {
 
 	public void realizarDebito(Integer valor) {
 		this.saldo -= valor;
+	}
+
+	public void adicionarTransacao(Transacao transacao) {
+		this.transacoes.add(transacao);
+	}
+
+	public List<Transacao> getTransacoes() {
+		return transacoes;
 	}
 
 }

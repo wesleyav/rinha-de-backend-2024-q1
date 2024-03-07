@@ -3,12 +3,15 @@ package com.github.wesleyav.api.entities;
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
@@ -19,9 +22,6 @@ public class Transacao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-
-	@Column(name = "cliente_id")
-	public Integer clienteId;
 
 	@Column(name = "valor")
 	private Integer valor;
@@ -38,13 +38,16 @@ public class Transacao {
 	@Version
 	private Integer version;
 
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
+	@JsonIgnore
+	private Cliente cliente;
+
 	public Transacao() {
 	}
 
-	public Transacao(Integer id, Integer clienteId, Integer valor, String tipo, String descricao, Instant realizadaEm,
-			Integer version) {
+	public Transacao(Integer id, Integer valor, String tipo, String descricao, Instant realizadaEm, Integer version) {
 		this.id = id;
-		this.clienteId = clienteId;
 		this.valor = valor;
 		this.tipo = tipo;
 		this.descricao = descricao;
@@ -52,12 +55,11 @@ public class Transacao {
 		this.version = version;
 	}
 
-	public Transacao(Integer valor, String tipo, String descricao, Instant realizadaEm, Cliente cliente) {
+	public Transacao(Integer valor, String tipo, String descricao, Instant realizadaEm) {
 		this.valor = valor;
 		this.tipo = tipo;
 		this.descricao = descricao;
 		this.realizadaEm = realizadaEm;
-		this.clienteId = cliente.getId();
 	}
 
 	public Integer getId() {
@@ -66,14 +68,6 @@ public class Transacao {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getClienteId() {
-		return clienteId;
-	}
-
-	public void setClienteId(Integer clienteId) {
-		this.clienteId = clienteId;
 	}
 
 	public Integer getValor() {
@@ -114,6 +108,14 @@ public class Transacao {
 
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 }

@@ -19,13 +19,19 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_api`.`transacao` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `version` INT NOT NULL DEFAULT 0,
+  `version` INT NULL,
   `valor` INT NOT NULL,
   `tipo` VARCHAR(1) NOT NULL,
   `descricao` VARCHAR(10) NOT NULL,
   `realizada_em` DATE NULL,
-  `cliente_id` INT NULL,
-  PRIMARY KEY (`id`))
+  `cliente_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_transacao_cliente_idx` (`cliente_id` ASC) VISIBLE,
+  CONSTRAINT `fk_transacao_cliente`
+    FOREIGN KEY (`cliente_id`)
+    REFERENCES `db_api`.`cliente` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 INSERT INTO db_api.cliente (id, limite, saldo) VALUES(1, 100000, 0);
