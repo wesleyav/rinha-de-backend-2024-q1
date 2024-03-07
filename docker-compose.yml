@@ -11,8 +11,6 @@ services:
     environment:
       - SERVER_PORT=8082
       - MYSQL_URL=jdbc:mysql://mysqlserver/db_api
-    volumes:
-      - ./:/app
     depends_on:
       - mysqlserver
     healthcheck:
@@ -23,8 +21,8 @@ services:
     # deploy:
     #   resources:
     #     limits:
-    #       cpus: '0.3'
-    #       memory: 170MB
+    #       cpus: '0.4'
+    #       memory: 120MB
   api02:
     container_name: api02
     hostname: api02
@@ -36,8 +34,6 @@ services:
     environment:
       - SERVER_PORT=8083
       - MYSQL_URL=jdbc:mysql://mysqlserver/db_api
-    volumes:
-      - ./:/app
     depends_on:
       - api01
     healthcheck:
@@ -48,8 +44,8 @@ services:
     # deploy:
     #   resources:
     #     limits:
-    #       cpus: '0.3'
-    #       memory: 170MB
+    #       cpus: '0.4'
+    #       memory: 120MB
   nginx:
     container_name: load-balancer
     hostname: nginx
@@ -65,8 +61,8 @@ services:
     # deploy:
     #   resources:
     #     limits:
-    #       cpus: '0.3'
-    #       memory: 10MB
+    #       cpus: '0.1'
+    #       memory: 15MB
   mysqlserver:
     container_name: db-mysql
     hostname: mysql
@@ -90,8 +86,8 @@ services:
     # deploy:
     #   resources:
     #     limits:
-    #       cpus: '0.5'
-    #       memory: 200MB
+    #       cpus: '0.6'
+    #       memory: 300MB
 # networks:
 #   default:
 #     driver: bridge
