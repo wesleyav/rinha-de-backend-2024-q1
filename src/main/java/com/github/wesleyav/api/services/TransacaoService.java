@@ -46,49 +46,48 @@ public class TransacaoService {
 	@Transactional
 	public ClienteResponseDTO transacao(Integer idCliente, TransacaoRequestDTO transacaoRequestDTO) {
 
-		if (transacaoRequestDTO.getValor() < 0) {
+		if (transacaoRequestDTO.valor() < 0) {
 			throw new ValorTransacaoPositivoException();
 		}
 
-		if (transacaoRequestDTO.getValor() == null) {
+		if (transacaoRequestDTO.valor() == null) {
 			throw new ValorTransacaoNuloException();
 		}
 
-		if (!transacaoRequestDTO.getTipo().equalsIgnoreCase("d")
-				&& !transacaoRequestDTO.getTipo().equalsIgnoreCase("c")) {
+		if (!transacaoRequestDTO.tipo().equalsIgnoreCase("d") && !transacaoRequestDTO.tipo().equalsIgnoreCase("c")) {
 			throw new TipoTransacaoInvalidoException();
 		}
 
-		if (transacaoRequestDTO.getDescricao() == null) {
-			throw new NullPointerException("Descrição da transação é nula");
+		if (transacaoRequestDTO.descricao() == null) {
+			throw new NullPointerException("Descricao da transacao e nula");
 		}
 
-		if (transacaoRequestDTO.getDescricao().length() > 10) {
-			throw new DataIntegrityViolationException("Descrição da transação excede o tamanho máximo permitido");
+		if (transacaoRequestDTO.descricao().length() > 10) {
+			throw new DataIntegrityViolationException("Descricao da transacao excede o tamanho máximo permitido");
 		}
 
 		Cliente cliente = clienteRepository.findClienteById(idCliente)
-				.orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado"));
+				.orElseThrow(() -> new ClienteNotFoundException("Cliente nao encontrado"));
 
-		if (transacaoRequestDTO.getTipo().equalsIgnoreCase("c")) {
-			cliente.realizarCredito(transacaoRequestDTO.getValor());
+		if (transacaoRequestDTO.tipo().equalsIgnoreCase("c")) {
+			cliente.realizarCredito(transacaoRequestDTO.valor());
 		}
-		if (transacaoRequestDTO.getTipo().equalsIgnoreCase("d")) {
-			if (transacaoRequestDTO.getValor() > (cliente.getSaldo() + cliente.getLimite())) {
+		if (transacaoRequestDTO.tipo().equalsIgnoreCase("d")) {
+			if (transacaoRequestDTO.valor() > (cliente.getSaldo() + cliente.getLimite())) {
 				throw new DebitoExcedeLimiteException();
 			}
-			if (cliente.getSaldo() < transacaoRequestDTO.getValor()) {
+			if (cliente.getSaldo() < transacaoRequestDTO.valor()) {
 				throw new DebitoCausaSaldoNegativoException();
 			}
-			cliente.realizarDebito(transacaoRequestDTO.getValor());
+			cliente.realizarDebito(transacaoRequestDTO.valor());
 		}
 
 		Transacao transacao = new Transacao();
-		transacao.setValor(transacaoRequestDTO.getValor());
-		transacao.setTipo(transacaoRequestDTO.getTipo());
-		transacao.setDescricao(transacaoRequestDTO.getDescricao());
+		transacao.setValor(transacaoRequestDTO.valor());
+		transacao.setTipo(transacaoRequestDTO.tipo());
+		transacao.setDescricao(transacaoRequestDTO.descricao());
 		transacao.setRealizadaEm(Instant.now());
-		transacao.setClienteId(idCliente);
+		transacao.setCliente(cliente);
 
 		clienteRepository.save(cliente);
 
@@ -98,5 +97,4 @@ public class TransacaoService {
 
 		return clienteResponseDTO;
 	}
-
 }

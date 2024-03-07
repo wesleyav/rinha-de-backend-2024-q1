@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record ExtratoResponseDTO(
-
-		@JsonProperty("saldo") SaldoResponseDTO saldo,
+public record ExtratoResponseDTO(@JsonProperty("saldo") SaldoResponseDTO saldo,
 		@JsonProperty("ultimas_transacoes") List<TransacaoResponseDTO> ultimasTransacoes) {
-
 }

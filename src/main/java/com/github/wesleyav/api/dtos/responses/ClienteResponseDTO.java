@@ -1,5 +1,7 @@
 package com.github.wesleyav.api.dtos.responses;
 
-public record ClienteResponseDTO(Integer limite, Integer saldo) {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+public record ClienteResponseDTO(@JsonProperty(value = "limite") Integer limite,
+		@JsonProperty(value = "saldo") Integer saldo) {
 }
