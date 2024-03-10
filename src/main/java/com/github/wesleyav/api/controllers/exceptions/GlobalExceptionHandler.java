@@ -5,63 +5,62 @@ import java.time.Instant;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.github.wesleyav.api.services.exceptions.ClienteNotFoundException;
 import com.github.wesleyav.api.services.exceptions.DebitoCausaSaldoNegativoException;
 import com.github.wesleyav.api.services.exceptions.DebitoExcedeLimiteException;
 import com.github.wesleyav.api.services.exceptions.ResourceNotFoundException;
-import com.github.wesleyav.api.services.exceptions.TipoTransacaoInvalidoException;
-import com.github.wesleyav.api.services.exceptions.ValorTransacaoNuloException;
-import com.github.wesleyav.api.services.exceptions.ValorTransacaoPositivoException;
+import com.github.wesleyav.api.services.exceptions.UnprocessableEntityException;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<StandardError> methodArgumentNotValidException(MethodArgumentNotValidException e,
+			HttpServletRequest request) {
+		String error = "Payload inválido";
+		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+
+		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(status).body(standardError);
+	}
+
+	@ExceptionHandler(UnprocessableEntityException.class)
+	public ResponseEntity<StandardError> unprocessableEntityException(UnprocessableEntityException e,
+			HttpServletRequest request) {
+		String error = "Payload inválido";
+		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+
+		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(status).body(standardError);
+	}
+
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<StandardError> httpMessageNotReadableException(HttpMessageNotReadableException e,
+			HttpServletRequest request) {
+		String error = "Payload inválido";
+		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+
+		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(status).body(standardError);
+	}
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<StandardError> entityNotFoundException(EntityNotFoundException e,
 			HttpServletRequest request) {
 		String error = "O id do cliente deve ser entre 1 e 6.";
 		HttpStatus status = HttpStatus.NOT_FOUND;
-
-		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
-				request.getRequestURI());
-		return ResponseEntity.status(status).body(standardError);
-	}
-
-	@ExceptionHandler(ValorTransacaoPositivoException.class)
-	public ResponseEntity<StandardError> valorTransacaoPositivoException(ValorTransacaoPositivoException e,
-			HttpServletRequest request) {
-		String error = "O atributo valor deve ser um número inteiro positivo.";
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-
-		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
-				request.getRequestURI());
-		return ResponseEntity.status(status).body(standardError);
-	}
-
-	@ExceptionHandler(ValorTransacaoNuloException.class)
-	public ResponseEntity<StandardError> valorTransacaoNuloException(ValorTransacaoNuloException e,
-			HttpServletRequest request) {
-		String error = "O atributo valor não pode ser nulo.";
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-
-		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
-				request.getRequestURI());
-		return ResponseEntity.status(status).body(standardError);
-	}
-
-	@ExceptionHandler(TipoTransacaoInvalidoException.class)
-	public ResponseEntity<StandardError> tipoTransacaoInvalidoException(TipoTransacaoInvalidoException e,
-			HttpServletRequest request) {
-		String error = "O tipo da transação deve ser 'c' para crédito ou 'd' para débito.";
-		HttpStatus status = HttpStatus.BAD_REQUEST;
 
 		StandardError standardError = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
 				request.getRequestURI());

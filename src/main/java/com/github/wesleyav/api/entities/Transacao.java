@@ -1,5 +1,6 @@
 package com.github.wesleyav.api.entities;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,11 +14,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "transacao")
-public class Transacao {
+public class Transacao implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,9 +37,6 @@ public class Transacao {
 	@JsonFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss.SSS'Z'", timezone = "UTC")
 	private Instant realizadaEm;
 
-	@Version
-	private Integer version;
-
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	@JsonIgnore
@@ -46,13 +45,12 @@ public class Transacao {
 	public Transacao() {
 	}
 
-	public Transacao(Integer id, Integer valor, String tipo, String descricao, Instant realizadaEm, Integer version) {
+	public Transacao(Integer id, Integer valor, String tipo, String descricao, Instant realizadaEm) {
 		this.id = id;
 		this.valor = valor;
 		this.tipo = tipo;
 		this.descricao = descricao;
 		this.realizadaEm = realizadaEm;
-		this.version = version;
 	}
 
 	public Transacao(Integer valor, String tipo, String descricao, Instant realizadaEm) {
@@ -100,14 +98,6 @@ public class Transacao {
 
 	public void setRealizadaEm(Instant realizadaEm) {
 		this.realizadaEm = realizadaEm;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	public Cliente getCliente() {

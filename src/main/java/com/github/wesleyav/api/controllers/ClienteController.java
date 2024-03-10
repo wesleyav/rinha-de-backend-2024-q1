@@ -17,11 +17,10 @@ import com.github.wesleyav.api.dtos.responses.ClienteResponseDTO;
 import com.github.wesleyav.api.dtos.responses.ExtratoResponseDTO;
 import com.github.wesleyav.api.services.ExtratoService;
 import com.github.wesleyav.api.services.TransacaoService;
+import com.github.wesleyav.api.services.exceptions.ClienteNotFoundException;
 
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping(value = "/clientes")
 public class ClienteController {
@@ -36,8 +35,13 @@ public class ClienteController {
 
 	@PostMapping(value = "/{id}/transacoes")
 	public ResponseEntity<ClienteResponseDTO> transacao(@PathVariable Integer id,
-			@Valid @RequestBody TransacaoRequestDTO transacaoRequestDTO) {
+			@RequestBody @Valid TransacaoRequestDTO transacaoRequestDTO) {
 		logger.info("Requisicao POST recebida em /clientes/" + id + "/transacoes");
+
+		if (id < 1 || id > 5) {
+			throw new ClienteNotFoundException("Cliente nao encontrado");
+		}
+
 		ClienteResponseDTO clienteResponseDTO = transacaoService.transacao(id, transacaoRequestDTO);
 		return new ResponseEntity<ClienteResponseDTO>(clienteResponseDTO, HttpStatus.OK);
 	}

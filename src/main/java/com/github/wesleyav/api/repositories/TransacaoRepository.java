@@ -22,4 +22,7 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Integer> {
 
 	List<Transacao> findByClienteIdOrderByRealizadaEmDesc(Integer id, Limit limit);
 
+	@Query("SELECT t FROM Transacao t WHERE t.cliente.id = :id ORDER BY t.realizadaEm DESC")
+    List<Transacao> findTop10ByClienteIdOrderByRealizadaEmDesc(@Param("id") Integer id);
+
 }
