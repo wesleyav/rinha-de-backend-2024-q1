@@ -19,7 +19,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_api`.`transacao` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `version` INT NULL,
   `valor` INT NOT NULL,
   `tipo` VARCHAR(1) NOT NULL,
   `descricao` VARCHAR(10) NOT NULL,
