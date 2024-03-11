@@ -4,8 +4,9 @@ services:
     container_name: api01
     hostname: api01
     restart: always
-    build:
-      context: .
+    # build:
+    #   context: .
+    image: docker.io/wesleyav/rinha-de-backend-2024-q1:latest
     ports:
       - "8082:8080"
     environment:
@@ -18,17 +19,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.4'
-    #       memory: 120MB
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+          memory: 155MB
   api02:
     container_name: api02
     hostname: api02
     restart: always
-    build:
-      context: .
+    # build:
+    #   context: .
+    image: docker.io/wesleyav/rinha-de-backend-2024-q1:latest
     ports:
       - "8083:8080"
     environment:
@@ -41,11 +43,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.4'
-    #       memory: 120MB
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+          memory: 155MB
   nginx:
     container_name: load-balancer
     hostname: nginx
@@ -58,11 +60,11 @@ services:
       - api02
     ports:
       - "9999:9999"
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.1'
-    #       memory: 15MB
+    deploy:
+      resources:
+        limits:
+          cpus: '0.17'
+          memory: 10MB
   mysqlserver:
     container_name: db-mysql
     hostname: mysql
@@ -83,12 +85,12 @@ services:
       interval: 15s
       timeout: 5s
       retries: 10
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.6'
-    #       memory: 300MB
-# networks:
-#   default:
-#     driver: bridge
-#     name: rinha-nginx-2024q1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.13'
+          memory: 230MB
+networks:
+  default:
+    driver: bridge
+    name: rinha-nginx-2024q1
